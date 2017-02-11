@@ -18,7 +18,7 @@ func NewHooker(conn, table string) (*hooker, error){
     if err != nil {
         return nil, err
     }
-    _, err = db.Exec("CREATE TABLE IF NOT EXISTS `"+table+"` (`id` bigint unsigned NOT NULL AUTO_INCREMENT,`level` VARCHAR(10) NOT NULL,`time` DATETIME NOT NULL,`message` LONGTEXT,PRIMARY KEY (`id`),KEY `time` (`time`),KEY `level` (`level`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+    _, err = db.Exec("CREATE TABLE IF NOT EXISTS `"+table+"` (`id` bigint unsigned NOT NULL AUTO_INCREMENT,`level` VARCHAR(10) NOT NULL,`time` DATETIME NOT NULL,`message` LONGTEXT,PRIMARY KEY (`id`),KEY `time` (`time`),KEY `level` (`level`), FULLTEXT KEY `message` (`message`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
     if err != nil {
         return nil, err
     }
