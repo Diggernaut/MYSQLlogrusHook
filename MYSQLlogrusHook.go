@@ -19,11 +19,18 @@ func NewHooker(conn, table string) (*hooker, error){
         return nil, err
     }
     _, err = db.Exec("CREATE TABLE IF NOT EXISTS `"+table+"` (`id` bigint unsigned NOT NULL AUTO_INCREMENT,`level` VARCHAR(10) NOT NULL,`time` DATETIME NOT NULL,`message` LONGTEXT,PRIMARY KEY (`id`),KEY `time` (`time`),KEY `level` (`level`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+    if err != nil {
+        return nil, err
+    }
+    _, err = db.Exec("TRUNCATE `"+table+"`;")
+    if err != nil {
+        return nil, err
+    }
     return &hooker{db: db, t: table}, nil
 }
 
 func (h *hooker) Fire(entry *logrus.Entry) error {
-    _, err := h.db.Exec("INSERT INTO `"+h.t+"` (`level`,`time`,`message`) VALUES (?,?,?)",entry.Level.String(), entry.Time, entry.Message)
+    _, err := h.db.Exec("INSERT INTO `"+h.t+"` (`level`,`time`,`message`) VALUES (?,?,?);",entry.Level.String(), entry.Time, entry.Message)
     if err != nil {
         return fmt.Errorf("Failed to send log entry to mysqldb: %v", err)
     }
