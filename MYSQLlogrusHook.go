@@ -1,6 +1,6 @@
 package MYSQLlogrusHook
 import (
-    "github.com/Sirupsen/logrus"
+    "github.com/sirupsen/logrus"
     _ "github.com/go-sql-driver/mysql"
     "database/sql"
     "fmt"
